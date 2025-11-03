@@ -23,3 +23,37 @@ Authentication System
     Admin Role - Full access to all features
 
     Operator Role - Limited features for daily operations
+
+    Operator Features
+
+    QR Code Scanner - Use scanner to scan student QR codes
+
+    View Late Attendance - Monitor weekly late attendance data
+
+    Manual Entry - Manual late attendance entry if needed
+
+Admin Features
+
+    Data Management - CRUD operations for students, classes, and majors
+
+    QR Generation - Generate QR codes for new students
+
+    Reports - Access comprehensive late attendance reports
+
+    User Management - Manage operator users
+
+QR Code Scanning
+
+    Navigate to "Scan QR Code" menu
+
+    Point camera at student's QR code
+
+    System automatically detects and records lateness
+
+    Data saved with timestamp
+
+    License
+
+© 2024 MDwiFauzan. All rights reserved.
+
+This project is licensed under proprietary license. Distribution, modification, or reuse is not permitted without written permission from the creator.
