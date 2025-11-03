@@ -1,59 +1,48 @@
-Student Late Attendance Application
+# Student Late Attendance System
 
-A web application for monitoring and managing student late attendance with QR code scanning system.
-Features
-Data Management
+A web-based attendance system used to record and manage student lateness.  
+This application provides QR-based attendance scanning and role-based management to organize student data and track weekly lateness.
 
-    Student Management - Complete CRUD operations for student data with QR codes
+---
 
-    Class Management - Manage class data
+## 🚀 Features
 
-    Major Management - Manage major/department data
+### ✅ Late Attendance Tracking
+- Scan student QR codes to record lateness
+- View students who have been late within the last **7 days**
 
-Late Attendance Monitoring
+### 👥 User Roles & Permissions
+| Role | Permissions |
+|------|-------------|
+| Admin | Full access and system control |
+| Operator | Manage attendance & student-related features |
 
-    Weekly Dashboard - View students who were late in the past week
+> Certain features are exclusively available for **Operator** role to support workflow separation.
 
-    QR Code Scanner - Scan student QR codes to record lateness
+### 🧑‍🎓 Student Management
+- CRUD student data
+- Automatically generated **QR Code** for each student
 
-    Automatic Recording - Late attendance data automatically recorded when scanned
+### 🏫 Class & Major Management
+- CRUD **Classes**
+- CRUD **Majors**
 
-Authentication System
+### 📷 QR Code System
+- QR code generation per student
+- QR scanner to record lateness instantly
 
-    Admin Role - Full access to all features
+---
 
-    Operator Role - Limited features for daily operations
+## 🛠 Tech Stack
 
-    Operator Features
+| Component | Technology |
+|----------|------------|
+| Framework | **Laravel** |
+| Database | MySQL / MariaDB |
+| Authentication | Laravel Auth + Role Middleware |
+| QR Features | QR Generator / Scanner libraries |
 
-    QR Code Scanner - Use scanner to scan student QR codes
+## License
+This project is licensed under the MIT License — see the [LICENSE](./LICENSE) file for details.
 
-    View Late Attendance - Monitor weekly late attendance data
-
-    Manual Entry - Manual late attendance entry if needed
-
-Admin Features
-
-    Data Management - CRUD operations for students, classes, and majors
-
-    QR Generation - Generate QR codes for new students
-
-    Reports - Access comprehensive late attendance reports
-
-    User Management - Manage operator users
-
-QR Code Scanning
-
-    Navigate to "Scan QR Code" menu
-
-    Point camera at student's QR code
-
-    System automatically detects and records lateness
-
-    Data saved with timestamp
-
-    License
-
-© 2024 MDwiFauzan. All rights reserved.
-
-This project is licensed under proprietary license. Distribution, modification, or reuse is not permitted without written permission from the creator.
+Developed by Me.
