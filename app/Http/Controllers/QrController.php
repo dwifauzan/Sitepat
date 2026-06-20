@@ -42,25 +42,7 @@ class QrController extends Controller
 
     function lateTable()
     {
-        // // Ambil semua data siswa di mana kolom 'Telat' lebih besar dari 1
-        $dataCount = Datasiswa::with('kelas','jurusan')->where('Telat',0)->count();
-        
-        // // Periksa apakah ada data yang ditemukan
-        if ($dataCount < 0) {
-            // Jika tidak ada data yang ditemukan, Anda bisa mengembalikan view tanpa data
-            // return view('content.qrScan.lateTable', ['dataLateSiswa' => null]);
-            return response()->json(['error' => 'Terdapat nilai 0 di dalam database'], 400);
-
-        }
-        
-        // $dataLateSiswa = datasiswa::get();
-        $dataLateSiswa = Datasiswa::with('kelas', 'jurusan')->where('Telat', '>=', 1)->get();
-        // $siswaTelat = array(
-        //     'datasiswa' =>datasiswa::all(),
-        //     'kelasList' => kelas::pluck('Nama_kelas', 'id'),
-        //     'jurusanList' => jurusan::pluck('Nama_jurusan', 'id'),
-        // );
-        // Jika ada data yang ditemukan, kembalikan view dengan data
+        $dataLateSiswa = \App\Models\keterlambatan::with('datasiswa', 'datasiswa.kelas', 'datasiswa.jurusan')->get();
         return view('content.qrScan.lateTable', compact('dataLateSiswa'));
     }
 

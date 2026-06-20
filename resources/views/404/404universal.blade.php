@@ -3,33 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sorry but we get problem here!</title>
-    <link rel="stylesheet" href="{{asset('bootstrap.min.css')}}">
+    <title>404 | LATELINK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/tailwind.css') }}">
 </head>
-<body>
-     <!-- Error 404 Template 1 - Bootstrap Brain Component -->
-     <section class="py-3 py-md-5 min-vh-100 d-flex justify-content-center align-items-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="text-center">
-                        <h2 class="d-flex justify-content-center align-items-center gap-2 mb-4">
-                            <span class="display-1 fw-bold">4</span>
-                            <i class="bi bi-exclamation-circle-fill text-danger display-4"></i>
-                            <span class="display-1 fw-bold bsb-flip-h">0</span>
-                            <i class="bi bi-exclamation-circle-fill text-danger display-4"></i>
-                            <span class="display-1 fw-bold bsb-flip-h">4</span>
-                        </h2>
-                        <h3 class="h2 mb-2">Oops! Data Table Have Data Anomaly.</h3>
-                        <p class="mb-5">The page you are looking for was not found.</p>
-                        {{-- <a class="btn bsb-btn-5xl btn-dark rounded-pill px-5 fs-6 m-0" href="#!" role="button">Back to Home</a> --}}
-                    </div>
-                </div>
-            </div>
+<body class="font-sans antialiased">
+    <div class="min-h-screen flex items-center justify-center px-4" style="background: linear-gradient(135deg, #2563EB 0%, #DC2626 100%);">
+        <div class="text-center">
+            <h1 class="text-8xl font-bold text-white mb-4">404</h1>
+            <p class="text-xl text-white/80 mb-8">Halaman tidak ditemukan</p>
+            <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-600 font-medium rounded-lg hover:bg-slate-100 transition-colors">
+                <i class="fas fa-arrow-left"></i>
+                Kembali
+            </a>
         </div>
-    </section>
-
-    <script src="{{asset('bootstrap.bundle.min.js')}}"></script>
+    </div>
 </body>
 </html>

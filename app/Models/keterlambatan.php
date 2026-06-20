@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class keterlambatan extends Model
 {
     use HasFactory;
-    protected $fillable = ['Nisn_siswa', 'Tanggal'];
+    protected $fillable = ['Nisn_siswa', 'Tanggal', 'jurusan_id', 'kelas_id', 'Telat'];
     protected $primarykey = 'id';
 
     public function datasiswa(){

@@ -1,124 +1,88 @@
-@extends('template.master')
-{{-- @if (auth()->user()->isSuperAdmin()) --}}
-@section('dashboard')
-    <!-- Main content -->
-    <section class="content content-wrapper">
-        <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
-            <div class="row">
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>{{ $allstat['statSiswa'] }}</h3>
+@extends('layouts.app')
 
-                            <p class="text-capitalize">jumlah siswa</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
+@section('content')
+    <div>
+        <h1 class="text-2xl font-bold text-slate-800 mb-6">Dashboard</h1>
 
+        {{-- Stat Cards --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Total Siswa</p>
+                        <p class="text-3xl font-bold text-slate-800 mt-1">{{ $allstat['statSiswa'] }}</p>
                     </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>{{ $allstat['statwalKelas'] }}</h3>
-
-                            <p class="text-capitalize">Jumlah Wali kelas</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-
+                    <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                        <i class="fas fa-users text-blue-600 text-xl"></i>
                     </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>{{ $allstat['statkapJurusan'] }}</h3>
-
-                            <p class="text-capitalize">Jumlah Kaproli</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            @if ( $allstat['statTelat'] > 0)
-                                <h3>{{ $allstat['statTelat'] }}</h3>
-                            @else
-                                <h3>0</h3>
-                            @endif
-
-                            <p class="text-capitalize">Jumlah Telat</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-
-                    </div>
-                </div>
-                <div style="width: 80%; margin: auto;">
-                    <canvas id="barChart"></canvas>
                 </div>
             </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Wali Kelas</p>
+                        <p class="text-3xl font-bold text-slate-800 mt-1">{{ $allstat['statwalKelas'] }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+                        <i class="fas fa-chalkboard-teacher text-green-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Kaprodi</p>
+                        <p class="text-3xl font-bold text-slate-800 mt-1">{{ $allstat['statkapJurusan'] }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-lg bg-amber-100 flex items-center justify-center">
+                        <i class="fas fa-user-tie text-amber-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Total Telat</p>
+                        <p class="text-3xl font-bold text-slate-800 mt-1">{{ $allstat['statTelat'] > 0 ? $allstat['statTelat'] : 0 }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    </section>
-    <!-- right col -->
-    </div>
-    <!-- /.row (main row) -->
-    </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+        {{-- Chart --}}
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h3 class="text-lg font-semibold text-slate-800 mb-4">Grafik Keterlambatan</h3>
+            <canvas id="barChart" height="100"></canvas>
+        </div>
     </div>
 @endsection
 
-@push('scriptChart')
+@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     var ctx = document.getElementById('barChart').getContext('2d');
-
     var data = {
-        labels: @json($dates), // Labels will be the formatted dates
-        datasets: [
-            {
-                label: 'Siswa telat hari ini',
-                data: @json($telatData), // Data will be the count of late students
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            },
-        ]
+        labels: @json($dates),
+        datasets: [{
+            label: 'Siswa telat',
+            data: @json($telatData),
+            backgroundColor: 'rgba(37, 99, 235, 0.2)',
+            borderColor: 'rgba(37, 99, 235, 1)',
+            borderWidth: 2,
+            tension: 0.3
+        }]
     };
-
     var options = {
         scales: {
-            x: {
-                stacked: true
-            },
-            y: {
-                beginAtZero: true,
-                stacked: true
-            }
+            y: { beginAtZero: true }
+        },
+        plugins: {
+            legend: { display: false }
         }
     };
-
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: data,
-        options: options
-    });
+    new Chart(ctx, { type: 'line', data: data, options: options });
 </script>
-
-
 @endpush

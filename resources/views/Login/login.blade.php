@@ -1,58 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login | LATELINK</title>
-    {{-- css bootstrap --}}
-    <link rel="stylesheet" href="{{ asset('bootstrap.min.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/tailwind.css') }}">
 </head>
-
-<body>
-    <div class="container">
-        <div class="row d-flex justify-content-center align-items-center m-auto mt-5" id="row">
-            
-            <div class="col-md-4 card border border-2 p-5 rounded-3 shadow-lg">
-                <img class="card-img-top" src="https://img.freepik.com/free-vector/hand-drawn-life-coaching-illustration_23-2150279251.jpg?t=st=1714370219~exp=1714373819~hmac=fa2c36cdd6c99f0e988f4316fd87d4dafff6ca0fca765a320ab3406ec1fa70b1&w=996" alt="">
-                <h1 class="text-uppercase fw-bold text-center fs-2 pt-3">go LATELINK</h1>
-                <form action="{{ route('loginAction') }}" method="post" class="mt-5">
-                    {{-- token --}}
-                    @csrf
-
-                    <div class="form-group d-flex flex-column gap-2">
-                        <label class="text-capitalize" for="">username :</label>
-                        <input class="form-control" type="text" placeholder="Masukan Username"
-                        autofocus name="name">
-                    </div>
-
-                    {{-- email --}}
-                    {{-- <label class="text-capitalize" for="">role username anda :</label>
-                    <input class="form-control" type="text" placeholder="email"
-                        aria-label="default input example" autofocus name="email"> --}}
-
-                    {{-- password --}}
-                    <div class="form-group d-flex flex-column gap-2">
-                        <label class="text-capitalize" for="">password :</label>
-                        <input class="form-control" type="password" placeholder="Masukan Password" name="password">
-                    </div>
-
-                    {{-- button submit --}}
-                    <button type="submit" class="btn btn-success mt-3 rounded px-3">Submit</button>
-                </form>
-                @if (session()->has('pesan'))
-                    {{ session('pesan') }}
-                @endif
+<body class="font-sans antialiased">
+    <div class="min-h-screen flex items-center justify-center px-4 py-12" style="background: linear-gradient(135deg, #2563EB 0%, #DC2626 100%);">
+        <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 rounded-2xl bg-primary-600 flex items-center justify-center mx-auto mb-4">
+                    <span class="text-white font-bold text-2xl">L</span>
+                </div>
+                <h1 class="text-2xl font-bold text-slate-800">LATELINK</h1>
+                <p class="text-sm text-slate-500 mt-1">SMA KENSA Bondowoso</p>
             </div>
+
+            <form action="{{ route('loginAction') }}" method="post">
+                @csrf
+                <div class="space-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-slate-700 mb-1">Username</label>
+                        <input type="text" name="name" id="name" placeholder="Masukan Username" autofocus
+                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm px-4 py-2.5">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                        <input type="password" name="password" id="password" placeholder="Masukan Password"
+                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm px-4 py-2.5">
+                    </div>
+
+                    @if (session()->has('pesan'))
+                        <div class="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                            {{ session('pesan') }}
+                        </div>
+                    @endif
+
+                    <button type="submit" class="w-full py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+                        Masuk
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-
-
-    {{-- script js --}}
-    <script src="{{ asset('bootstrap.bundle.min.js') }}"></script>
-    {{-- jquery --}}
-    <script src="{{ asset('jquery-3.7.1.min.js') }}"></script>
 </body>
-
 </html>

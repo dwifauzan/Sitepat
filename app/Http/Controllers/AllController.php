@@ -11,7 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
-use ILluminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,21 +27,16 @@ class AllController extends Controller
     // dashboard
     function dash()
     {
-        $dataTelat = datasiswa::sum('Telat');
-        // count setiap tables
         $allstat = array(
             'statSiswa' => datasiswa::count(),
             'statwalKelas' => kelas::select('Walikelas')->count(),
-            'statTelat' => $dataTelat > 0? $dataTelat :0,
+            'statTelat' => \App\Models\keterlambatan::sum('Telat'),
             'statkapJurusan' => jurusan::select('Nama_kaproli')->count(),
             'data' => User::with('Role')->get()
         );
 
-        $data = Datasiswa::selectRaw('DATE(updated_at) as date, SUM(telat) as telat')
-            ->whereBetween('updated_at', [
-                Carbon::now()->startOfWeek(),
-                Carbon::now()->endOfWeek()
-            ])
+        // Tampilkan grafik dari semua data keterlambatan
+        $data = \App\Models\keterlambatan::selectRaw('DATE(Tanggal) as date, SUM(Telat) as telat')
             ->groupBy('date')
             ->orderBy('date', 'ASC')
             ->get()
@@ -50,16 +45,16 @@ class AllController extends Controller
 
         $dates = [];
         $telatData = [];
-        $startDate = Carbon::now()->startOfWeek();
-
-        // Loop to get the dates from Monday to Friday
-        for ($i = 0; $i < 5; $i++) {
-            $currentDate = $startDate->copy()->addDays($i)->format('Y-m-d');
-            $dates[] = Carbon::parse($currentDate)->format('d/m/Y');
-            $telatData[] = isset($data[$currentDate]) ? $data[$currentDate]['telat'] : 0;
+        // Ambil semua tanggal yang ada di data
+        $allDates = array_keys($data);
+        if (!empty($allDates)) {
+            foreach ($allDates as $date) {
+                $dates[] = Carbon::parse($date)->format('d/m/Y');
+                $telatData[] = $data[$date]['telat'];
+            }
         }
 
-        return view('admin.dash', compact('allstat', 'data', 'dates', 'telatData'));
+        return view('admin.dash', compact('allstat', 'dates', 'telatData'));
     }
 
     function dashUpdate($id)
@@ -116,6 +111,8 @@ class AllController extends Controller
         Artisan::call('schedule:run');
         $data = array(
             'dataRelasi' => datasiswa::with('kelas', 'jurusan')->get(),
+            'kelas' => \App\Models\kelas::all(),
+            'jurusan' => \App\Models\jurusan::all(),
         );
         if (Auth::user()->role_id == 1) {
             return view('content.manage', compact('data'));

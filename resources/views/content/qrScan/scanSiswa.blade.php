@@ -1,82 +1,52 @@
-@extends('template.master')
-@section('scanSiswa')
-<div class="container">
-        <div class="row d-flex justify-content-center ms-auto mt-5">
-            <div class="card" style="width: 38rem;">
-                {{-- <img src="..." class="card-img-top" alt="..."> --}}
-                <div id="reader"></div>
-                <div class="card-body">
-                    <h5 class="card-title text-center">Scan Your QR </h5>
-                    <br>
-                    <form action="{{ route('scanacti') }}" method="post" id="form">
-                        <div class="col-4">
-                            <input type="hidden" name="nisn" id="result">
-                            <button type="submit" style="display: none">submit</button>
-                        </div>
-                        @csrf
-                        {{-- <input type="hidden" name="nama" id="nama"> --}}
-                    </form>
-                    {{-- validasi nisn tidak terdaftar --}}
-                    @if (session()->has('pesanNot'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ session('pesanNot') }}
-                        </div>
-                    @endif
-                    @if (session()->has('sudahScan'))
-                        <div class="alert alert-warning" role="alert">
-                            {{ session('sudahScan') }}
-                        </div>
-                    @endif
-                    @if (session()->has('berhasilDitambah'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('berhasilDitambah') }}
-                        </div>
-                    @endif
+@extends('layouts.app')
 
-                    <button type="button" class="btn btn-primary"><a href="{{route('dash')}}" style="color: white;" class="text-capitalize">kembali</a></button>
-                </div>
+@section('content')
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-2xl font-bold text-slate-800 mb-6 text-center">Scan Siswa</h1>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <div class="flex flex-col items-center gap-4">
+                <div class="w-full max-w-md" id="reader"></div>
+                <form action="{{ route('scanacti') }}" method="post" id="form">
+                    @csrf
+                    <input type="hidden" name="nisn" id="result">
+                    <button type="submit" style="display: none">submit</button>
+                </form>
+            </div>
+
+            <div class="mt-4 space-y-2">
+                @if (session()->has('pesanNot'))
+                    <x-alert variant="danger" :message="session('pesanNot')" />
+                @endif
+                @if (session()->has('sudahScan'))
+                    <x-alert variant="warning" :message="session('sudahScan')" />
+                @endif
+                @if (session()->has('berhasilDitambah'))
+                    <x-alert variant="success" :message="session('berhasilDitambah')" />
+                @endif
+            </div>
+
+            <div class="mt-4 text-center">
+                <a href="{{ route('dash') }}" class="inline-flex items-center gap-2 px-4 py-2 text-primary-600 hover:text-primary-800 font-medium text-sm transition-colors">
+                    <i class="fas fa-arrow-left"></i>
+                    Kembali ke Dashboard
+                </a>
             </div>
         </div>
     </div>
-
-    <div class="col-lg-6 d-flex justify-content-center mx-auto pt-5">
-        <div class="card bg-white shadow rounded-3 py-2 px-1 border-0">
-            {{-- <video class="col-lg" id="preview"></video> --}}
-
-        </div>
-    </div>
-
-    {{-- asset js bootstrap & jquery --}}
-    <script src="{{ asset('bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('jquery-3.7.1.min.js') }}"></script>
-    {{-- script qr scan --}}
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <script>
-        function onScanSuccess(decodedText, decodedResult) {
-            // handle the scanned code as you like, for example:
-            // console.log(`Code matched = ${decodedText}`, decodedResult);
-            $("#result").val(decodedText)
-
-            $("#form").submit()
-        }
-
-        function onScanFailure(error) {
-            // handle scan failure, usually better to ignore and keep scanning.
-            // for example:
-            console.warn(`Code scan error = ${error}`);
-        }
-
-        let html5QrcodeScanner = new Html5QrcodeScanner(
-            "reader", {
-                fps: 10,
-                qrbox: {
-                    width: 440,
-                    height: 400
-                }
-            },
-            /* verbose= */
-            false);
-        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-    </script>
-
 @endsection
+
+@push('scripts')
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script>
+    function onScanSuccess(decodedText, decodedResult) {
+        $("#result").val(decodedText);
+        $("#form").submit();
+    }
+    function onScanFailure(error) {
+        console.warn(`Code scan error = ${error}`);
+    }
+    let html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: { width: 440, height: 400 } }, false);
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+</script>
+@endpush

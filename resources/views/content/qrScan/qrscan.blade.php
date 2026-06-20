@@ -1,74 +1,53 @@
-<!-- @extends('template.master')
+@extends('layouts.app')
 
-@section('scanSiswa')
-    <div class="content-wrapper">
-        <div class="col-4">
-            <div id="reader" width="600px"></div>
-        </div>
-        <div class="col-4">
-            <input type="text" name="nisn" id="result">
-        </div>
-        <div class="col-lg-6 d-flex justify-content-center mx-auto pt-5">
-            <div class="card bg-white shadow rounded-3 py-2 px-1 border-0">
-                {{-- <video class="col-lg" id="preview"></video> --}}
+@section('content')
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-2xl font-bold text-slate-800 mb-6 text-center">QR Scan</h1>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <div class="flex flex-col items-center gap-4">
+                <div class="w-full max-w-md">
+                    <div id="reader"></div>
+                </div>
                 <form action="{{ route('scanacti') }}" method="post" id="form">
                     @csrf
-                    {{-- <input type="hidden" name="nama" id="nama"> --}}
+                    <input type="hidden" name="nisn" id="result">
+                    <button type="submit" style="display: none">submit</button>
                 </form>
-                {{-- validasi nisn tidak terdaftar --}}
+            </div>
+
+            <div class="mt-4 space-y-2">
                 @if (session()->has('pesanNot'))
-                    <div class="alert alert-danger" role="alert">
-                        {{ session('pesanNot') }}
-                    </div>
+                    <x-alert variant="danger" :message="session('pesanNot')" />
                 @endif
-                {{-- validasi nisn 2 kali scan --}}
                 @if (session()->has('gagal'))
-                    <div class="alert alert-warning" role="alert">
-                        {{ session('gagal') }}
-                    </div>
+                    <x-alert variant="warning" :message="session('gagal')" />
                 @endif
-                {{-- validasi nisn esok hari --}}
                 @if (session()->has('gagal2'))
-                    <div class="alert alert-warning" role="alert">
-                        {{ session('gagal2') }}
-                    </div>
+                    <x-alert variant="warning" :message="session('gagal2')" />
                 @endif
-                {{-- validasi nisn berhasil ditambahkan --}}
                 @if (session()->has('berhasil'))
-                    <div class="alert alert-secondary" role="alert">
-                        {{ session('berhasil') }}
-                    </div>
+                    <x-alert variant="success" :message="session('berhasil')" />
                 @endif
-                {{-- validasi nisn berhasil ditambahkan esok hari --}}
                 @if (session()->has('berhasil2'))
-                    <div class="alert alert-secondary" role="alert">
-                        {{ session('berhasil2') }}
-                    </div>
+                    <x-alert variant="success" :message="session('berhasil2')" />
                 @endif
             </div>
         </div>
     </div>
 @endsection
 
-@push('scriptQrScan')
+@push('scripts')
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
     function onScanSuccess(decodedText, decodedResult) {
-        // handle the scanned code as you like, for example:
-        // console.log(`Code matched = ${decodedText}`, decodedResult);
-        ${"#result"}.val(decodedText)
-      }
-      
-      function onScanFailure(error) {
-        // handle scan failure, usually better to ignore and keep scanning.
-        // for example:
+        $("#result").val(decodedText);
+        $("#form").submit();
+    }
+    function onScanFailure(error) {
         console.warn(`Code scan error = ${error}`);
-      }
-      
-      let html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader",
-        { fps: 10, qrbox: {width: 250, height: 250} },
-        /* verbose= */ false);
-      html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    }
+    let html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: { width: 250, height: 250 } }, false);
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 </script>
-@endpush -->
+@endpush

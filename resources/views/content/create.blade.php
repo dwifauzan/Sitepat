@@ -1,170 +1,104 @@
-@extends('template.master')
+@extends('layouts.app')
 
-@section('create')
-    <section class="content content-wrapper">
-        <div class="container-fluid">
-            <div class="row d-flex justify-content-center">
-                <div class="col-6 mt-4">
+@section('content')
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold text-slate-800 mb-6 text-center">Tambah Data Siswa</h1>
 
-                    <div class="card rounded-3">
-                        <h3 class="card-title text-capitalize text-center mt-3 fw-bold" style="font-family: 'Poppins', sans-serif; font-size: 2em;">Data Siswa Baru</h3>
-                            {{-- <a href="{{ route('dash') }}"><button type="button" class="btn btn-primary">Back</button></a> --}}
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <form action="{{ route('action') }}" method="post" x-data="{ step: 1, totalSteps: 3 }">
+                @csrf
 
+                {{-- Step Indicators --}}
+                <div class="flex items-center justify-center gap-4 mb-8">
+                    <template x-for="(label, i) in ['Data Pribadi', 'Data Akademik', 'Data Kontak']" :key="i">
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors"
+                                    :class="step >= i + 1 ? 'bg-primary-600 text-white' : 'bg-slate-200 text-slate-500'"
+                                    x-text="i + 1">
+                                </div>
+                                <span class="text-xs font-medium hidden sm:block"
+                                    :class="step >= i + 1 ? 'text-primary-600' : 'text-slate-400'"
+                                    x-text="label">
+                                </span>
+                            </div>
+                            <template x-if="i < totalSteps - 1">
+                                <div class="w-8 h-0.5" :class="step > i + 1 ? 'bg-primary-600' : 'bg-slate-200'"></div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
 
-                        <form action="{{ route('action') }}" method="post">
-                            @csrf
-                            <div class="card-body">
-                                {{-- nisn siswa --}}
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="exampleInputEmail1"
-                                        placeholder="Masukan nisn Siswa" name="nisn" autofocus maxlength="10" inputmode="numeric"
-                                        oninput="validateInput(event)">
-                                    @error('nisn')
-                                        <span style="color: red;">*{{ $message }}*</span>
-                                    @enderror
-                                </div>
-                                {{-- nama siswa --}}
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="exampleInputPassword1"
-                                        placeholder="Masukan nama Siswa" name="siswa">
-                                    @error('siswa')
-                                        <span style="color: red;">*{{ $message }}*</span>
-                                    @enderror
-                                </div>
-                                {{-- jenis kelamin --}}
-                                <div class="mb-3">
-                                    <label for="" class="text-capitalize">pilih gender</label>
-                                        <select class="custom-select form-control-border" id="exampleSelectBorder"
-                                            name="gender">
-                                            <option value="laki-laki">Laki laki</option>
-                                            <option value="perempuan">Perempuan</option>
-                                            @error('gender')
-                                                <span style="color: red;">*{{ $message }}*</span>
-                                            @enderror
-                                        </select>
-                                </div>
-                                {{-- relasi kelas --}}
-                                <div class="mb-3">
-                                    <label for="" class="text-capitalize">pilih kelas</label>
-                                        <select class="custom-select form-control-border" id="exampleSelectBorder"
-                                            name="kelas">
-                                            @foreach ($data['kelas'] as $item)
-                                                <option value="{{ $item->id }}">{{ $item->Nama_kelas }}</option>
-                                            @endforeach
-                                            @error('kelas')
-                                                <span style="color: red;">*{{ $message }}*</span>
-                                            @enderror
-                                        </select>
-                                </div>
-                                {{-- relasi jurusan --}}
-                                <div class="mb-3">
-                                    <label for="" class="text-capitalize">pilih jurusan</label>
-                                        <select class="custom-select form-control-border" id="exampleSelectBorder"
-                                            name="jurusan">
-                                            @foreach ($data['jurusan'] as $item)
-                                                <option value="{{ $item->id }}">{{ $item->Nama_jurusan }}</option>
-                                            @endforeach
-                                            @error('jurusan')
-                                                <span style="color: red;">*{{ $message }}*</span>
-                                            @enderror
-                                        </select>
-                                </div>
-                                {{-- alamat --}}
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="exampleInputPassword1"
-                                        placeholder="Masukan alamat Siswa" name="alamat">
-                                    @error('alamat')
-                                        <span style="color: red;">*{{ $message }}*</span>
-                                    @enderror
-                                </div>
-                                {{-- no handphone --}}
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="exampleInputPassword1"
-                                        placeholder="Masukan No Hp Siswa" name="nohp" oninput="validateInput(event)"
-                                        maxlength="12">
-                                    @error('nohp')
-                                        <span style="color: red;">*{{ $message }}*</span>
-                                    @enderror
-                                </div>
-                                {{-- nama ayah --}}
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="exampleInputPassword1"
-                                        placeholder="Masukan Nama ayah" name="ayah">
-                                    @error('ayah')
-                                        <span style="color: red;">*{{ $message }}*</span>
-                                    @enderror
-                                </div>
-                                {{-- ibu siswa --}}
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="exampleInputPassword1"
-                                        placeholder="Masukan Nama ibu" name="ibu">
-                                    @error('ibu')
-                                        <span style="color: red;">*{{ $message }}*</span>
-                                    @enderror
-                                </div>
-                                {{-- no handphone ayah --}}
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="exampleInputPassword1"
-                                        placeholder="Masukan No Hp ayah" name="hpAyah" oninput="validateInput(event)"
-                                        maxlength="12">
-                                    @error('hpAyah')
-                                        <span style="color: red;">*{{ $message }}*</span>
-                                    @enderror
-                                </div>
-                                {{-- no handphone ibu --}}
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="exampleInputPassword1"
-                                        placeholder="Masukan No Hp ibu" name="hpIbu" oninput="validateInput(event)"
-                                        maxlength="12">
-                                    @error('hpIbu')
-                                        <span style="color: red;">*{{ $message }}*</span>
-                                    @enderror
-                                </div>
-
-                                {{-- button --}}
-                                <button type="submit" class="btn btn-block rounded-4 shadow" style="background-color:#BB393E; font-family: 'Poppins', sans-serif; color: white;">Submit</button>
-                        </form>
+                {{-- Step 1: Data Pribadi --}}
+                <div x-show="step === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+                        <x-input name="nisn" label="NISN" placeholder="Masukan NISN" :required="true" maxlength="10" />
+                        <x-input name="siswa" label="Nama Siswa" placeholder="Masukan Nama Siswa" :required="true" />
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Jenis Kelamin <span class="text-danger-500">*</span></label>
+                            <select name="gender" class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm">
+                                <option value="laki-laki">Laki laki</option>
+                                <option value="perempuan">Perempuan</option>
+                            </select>
+                            @error('gender')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
+                        </div>
+                        <x-input name="alamat" label="Alamat" placeholder="Masukan Alamat" :required="true" />
                     </div>
-                @endsection
-            </div>
+                </div>
+
+                {{-- Step 2: Data Akademik --}}
+                <div x-show="step === 2" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Kelas <span class="text-danger-500">*</span></label>
+                            <select name="kelas" class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm">
+                                @foreach ($data['kelas'] as $item)
+                                    <option value="{{ $item->id }}">{{ $item->Nama_kelas }}</option>
+                                @endforeach
+                            </select>
+                            @error('kelas')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Jurusan <span class="text-danger-500">*</span></label>
+                            <select name="jurusan" class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm">
+                                @foreach ($data['jurusan'] as $item)
+                                    <option value="{{ $item->id }}">{{ $item->Nama_jurusan }}</option>
+                                @endforeach
+                            </select>
+                            @error('jurusan')<p class="mt-1 text-sm text-danger-600">{{ $message }}</p>@enderror
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Step 3: Data Kontak --}}
+                <div x-show="step === 3" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+                        <x-input name="nohp" label="No Handphone" placeholder="Masukan No HP" maxlength="12" />
+                        <x-input name="ayah" label="Nama Ayah" placeholder="Masukan Nama Ayah" />
+                        <x-input name="ibu" label="Nama Ibu" placeholder="Masukan Nama Ibu" />
+                        <x-input name="hpAyah" label="No HP Ayah" placeholder="Masukan No HP Ayah" maxlength="12" />
+                        <x-input name="hpIbu" label="No HP Ibu" placeholder="Masukan No HP Ibu" maxlength="12" />
+                    </div>
+                </div>
+
+                {{-- Navigation --}}
+                <div class="mt-6 flex items-center justify-between">
+                    <div>
+                        <button type="button" @click="step = 1" class="px-4 py-2 border-2 border-slate-300 text-slate-600 hover:bg-slate-50 font-medium rounded-lg text-sm transition-colors">Batal</button>
+                    </div>
+                    <div class="flex gap-3">
+                        <button type="button" x-show="step > 1" @click="step--" class="px-4 py-2 border-2 border-primary-600 text-primary-600 hover:bg-primary-50 font-medium rounded-lg text-sm transition-colors">
+                            <i class="fas fa-arrow-left mr-1"></i> Sebelumnya
+                        </button>
+                        <button type="button" x-show="step < totalSteps" @click="step++" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg text-sm transition-colors">
+                            Selanjutnya <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                        <button type="submit" x-show="step === totalSteps" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg text-sm transition-colors">
+                            <i class="fas fa-check mr-1"></i> Simpan
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const nextButtons = document.querySelectorAll('.next-step');
-            const prevButtons = document.querySelectorAll('.prev-step');
-            const steps = document.querySelectorAll('.step');
-            let currentStep = 0;
-
-            function showStep(stepIndex) {
-                steps.forEach((step, index) => {
-                    step.style.display = index === stepIndex ? 'block' : 'none';
-                });
-            }
-
-            nextButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    if (currentStep < steps.length - 1) {
-                        currentStep++;
-                        showStep(currentStep);
-                    }
-                });
-            });
-
-            prevButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    if (currentStep > 0) {
-                        currentStep--;
-                        showStep(currentStep);
-                    }
-                });
-            });
-
-            // Initialize the first step
-            showStep(currentStep);
-        });
-    </script>
-</section>
-{{-- @endif --}}
+@endsection
