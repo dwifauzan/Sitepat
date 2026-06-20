@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'operator',
             'email' => 'operator@gmail.com',
             'password' => bcrypt('operator22'),
-            'role_id' => 2
+            'role_id' => 3
         ]);
 
         // Kelas (Classes)

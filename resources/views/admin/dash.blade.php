@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ @extends('layouts.app')
 
 @section('page-header', 'Dashboard')
 
@@ -62,7 +62,7 @@
             <h3 class="text-base font-semibold text-slate-900 mb-4">Siswa Paling Sering Telat</h3>
             <div class="space-y-3">
                 @php
-                    $topLate = \App\Models\datasiswa::orderBy('Telat', 'desc')->take(5)->get();
+                    $topLate = \App\Models\datasiswa::withCount('keterlambatan')->orderBy('keterlambatan_count', 'desc')->take(5)->get();
                 @endphp
                 @forelse ($topLate as $i => $siswa)
                     <div class="flex items-center justify-between">
@@ -70,7 +70,7 @@
                             <span class="w-6 h-6 rounded-full {{ $i === 0 ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-600' }} flex items-center justify-center text-xs font-bold">{{ $i + 1 }}</span>
                             <span class="text-sm text-slate-700">{{ $siswa->Nama_siswa }}</span>
                         </div>
-                        <span class="text-sm font-medium {{ $siswa->Telat > 0 ? 'text-red-600' : 'text-slate-400' }}">{{ $siswa->Telat }}x</span>
+                        <span class="text-sm font-medium {{ $siswa->keterlambatan_count > 0 ? 'text-red-600' : 'text-slate-400' }}">{{ $siswa->keterlambatan_count }}x</span>
                     </div>
                 @empty
                     <p class="text-sm text-slate-400 text-center py-4">Belum ada data keterlambatan.</p>

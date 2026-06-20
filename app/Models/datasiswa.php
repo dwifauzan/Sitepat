@@ -17,8 +17,7 @@ class datasiswa extends Model
         return $this->belongsTo(jurusan::class);
     }
 
-    // ini adalah relasi keterlambatan
     public function keterlambatan(){
-        return $this->hasMany(keterlambatan::class);
+        return $this->hasMany(keterlambatan::class, 'Nisn_siswa', 'Nisn');
     }
 }

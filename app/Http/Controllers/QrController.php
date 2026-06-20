@@ -34,6 +34,13 @@ class QrController extends Controller
         }else{
             $datasiswa->increment('Telat');
             $datasiswa->touch();
+            keterlambatan::create([
+                'Nisn_siswa' => $nisn,
+                'Tanggal' => $today,
+                'jurusan_id' => $datasiswa->jurusan_id,
+                'kelas_id' => $datasiswa->kelas_id,
+                'Telat' => 1,
+            ]);
             return back()
                 ->with('berhasilDitambah', 'Tercatat terlambat')
                 ->with('siswa_nama', $datasiswa->Nama_siswa)
