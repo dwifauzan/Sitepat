@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\jurusan;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class jurusanController extends Controller
 {
-    // jurusan
     function jurusan(){
         $dataJurusan = jurusan::get();
 

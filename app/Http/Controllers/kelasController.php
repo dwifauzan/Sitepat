@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\kelas;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class kelasController extends Controller
 {
-     // khusus kelas
      function kelas(){
         $dataKelas = kelas::all();
 
@@ -70,7 +68,7 @@ class kelasController extends Controller
     }
 
     function delete($id){
-        Kelas::where('id', $id)->delete();
+        kelas::where('id', $id)->delete();
         return back()->with('success','Data berhasil dihapus');
     }
 

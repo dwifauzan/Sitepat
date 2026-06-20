@@ -3,40 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Models\datasiswa;
-use App\Models\jurusan;
-use App\Models\kelas;
 use App\Models\keterlambatan;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class QrController extends Controller
 {
     function qrscan()
     {
-        // $dataTelat = keterlambatan::all();
-        return view('content.qrScan.qrscan');
+        return redirect()->route('scanSiswa');
     }
 
     function scanacti()
     {
-        // dd(request()->input());
         $nisn = request()->nisn;
-        $datasiswa = datasiswa::where('Nisn', $nisn)->first();
+        $datasiswa = datasiswa::with('kelas', 'jurusan')->where('Nisn', $nisn)->first();
 
         if (!$datasiswa) {
-            return back()->with('pesanNot', 'Nisn anda tidak terdaftar');
+            return back()->with('pesanNot', 'NISN tidak ditemukan. Pastikan kartu siswa terdaftar di sistem.');
         }
 
         $today = Carbon::today();
 
         $cek = datasiswa::where('Nisn', $nisn)->whereDate('updated_at', $today)->first();
-        // $cek->increment('Telat'); //debug test 
         if($cek){
-            return back()->with('sudahScan', 'qr anda baru saja sudah di scan');
+            return back()
+                ->with('sudahScan', 'sudah tercatat')
+                ->with('siswa_nama', $datasiswa->Nama_siswa)
+                ->with('siswa_nisn', $datasiswa->Nisn)
+                ->with('siswa_kelas', ($datasiswa->kelas->Tingkat_kelas ?? '') . ' ' . ($datasiswa->kelas->Nama_kelas ?? ''));
         }else{
             $datasiswa->increment('Telat');
             $datasiswa->touch();
-            return back()->with('berhasilDitambah', 'Telah berhasil di scan');
+            return back()
+                ->with('berhasilDitambah', 'Tercatat terlambat')
+                ->with('siswa_nama', $datasiswa->Nama_siswa)
+                ->with('siswa_nisn', $datasiswa->Nisn)
+                ->with('siswa_kelas', ($datasiswa->kelas->Tingkat_kelas ?? '') . ' ' . ($datasiswa->kelas->Nama_kelas ?? ''));
         }
     }
 
@@ -46,15 +48,6 @@ class QrController extends Controller
         return view('content.qrScan.lateTable', compact('dataLateSiswa'));
     }
 
-    function destroy()
-    {
-        $lateSiswa = array(
-            'destroy' => DB::table('keterlambatans')->delete()
-        );
-        return back()->with('succes', 'berhasil dihapus');
-    }
-
-    // function qr scan view
     function scanSiswa()
     {
         return view('content.qrScan.scanSiswa');

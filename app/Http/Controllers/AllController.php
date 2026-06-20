@@ -9,12 +9,8 @@ use App\Models\keterlambatan;
 use App\Models\role;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AllController extends Controller
@@ -197,12 +193,6 @@ class AllController extends Controller
         $changeDataQr = json_encode($data['dataQr']);
 
         return view('content.qrScan.qrcode', compact('data', 'changeDataQr'));
-    }
-
-    // 404 route controller
-    function error()
-    {
-        return view('404.404universal');
     }
 
     function reset()

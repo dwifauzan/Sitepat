@@ -57,17 +57,10 @@ Route::middleware('auth')->group(function (){
     Route::post('/kelas/update/where/{id}', [kelasController::class, 'kelasUpdate'])->name('kelasUpdate');
     Route::delete('/kelas/delete/{id}', [kelasController::class, 'delete'])->name('deleteKelas');
 
-    // qr scan
-    Route::get('/qrcode/scan', [QrController::class, 'qrscan'])->name('qrscan');
-    // testing qr scan
     Route::get('/Scan/Siswa', [QrController::class, 'scanSiswa'])->name('scanSiswa');
+    Route::get('/qrcode/scan', [QrController::class, 'qrscan'])->name('qrscan');
     Route::post('/qrscan/action', [QrController::class, 'scanacti'])->name('scanacti');
     Route::get('/qrscan/lateSiswa', [QrController::class, 'lateTable'])->name('lateTable');
-    // Route::post('/qrscan/latesiswa/destroy', [QrController::class, 'destroy'])->name('destroy');
-    // qr code
     Route::get('/qrcode/{id}', [AllController::class, 'qrCode'])->name('qrCode');
 });
-// login
 
-// 404 universal error
-// Route::get('/latelink/website/problem', [AllController::class, 'error'])->name('404universal');

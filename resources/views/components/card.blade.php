@@ -2,7 +2,7 @@
     @if ($title || $action)
         <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
             @if ($title)
-                <h3 class="text-lg font-semibold text-primary-600">{{ $title }}</h3>
+                <h3 class="text-base font-semibold text-slate-900">{{ $title }}</h3>
             @endif
             @if ($action)
                 <div class="flex items-center gap-2">{{ $action }}</div>

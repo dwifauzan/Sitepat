@@ -22,17 +22,6 @@ class LoginController extends Controller
             return redirect()->intended(route('home'));
         }
 
-        // return back()->with('pesan', 'login failed!');
-
-        // sementara menggunakan ini dikarenakan developer lupa logic
-        // if ($request->input('name') == 'admin') {
-        //     if ($request->input('email') == 'admin@gmail.com') {
-        //         if ($request->input('password') == 'admin') {
-        //             return redirect(route('home'));
-        //         }
-        //     }
-        // }
-
         return back()->with('pesan', 'login failed!');
     }
 
