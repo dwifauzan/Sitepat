@@ -577,50 +577,77 @@ Toast (pojok kanan bawah, auto-dismiss 3s):
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│  Scan Keterlambatan Siswa                                    │
+│  Scan Keterlambatan                                           │
+│  Beranda / Scan Keterlambatan                                 │
 │                                                              │
-│  ┌─ Kamera QR ──────────────────────────────────────────┐   │
-│  │                                                      │   │
-│  │   ┌──────────────────────────────────────────────┐  │   │
-│  │   │                                              │  │   │
-│  │   │              [Camera Viewport]               │  │   │
-│  │   │                                              │  │   │
-│  │   │         ┌────────────────────┐               │  │   │
-│  │   │         │  ┌──┐        ┌──┐  │               │  │   │
-│  │   │         │  └──┘        └──┘  │  ← scan guide │  │   │
-│  │   │         │        QR          │               │  │   │
-│  │   │         │  ┌──┐        ┌──┐  │               │  │   │
-│  │   │         │  └──┘        └──┘  │               │  │   │
-│  │   │         └────────────────────┘               │  │   │
-│  │   │                                              │  │   │
-│  │   └──────────────────────────────────────────────┘  │   │
-│  │   [📷 Aktifkan Kamera]   Status: 🟢 Aktif           │   │
-│  └──────────────────────────────────────────────────── ┘   │
+│  ┌ Pindai QR Siswa ──────────────── [● Kamera] ──────────┐  │
+│  │                                                        │  │
+│  │   ┌──────────────────────────────────────────────┐    │  │
+│  │   │                                              │    │  │
+│  │   │           ┌──┐                    ┌──┐       │    │  │
+│  │   │           └──┘                    └──┘       │    │  │
+│  │   │               [Camera Viewport]              │    │  │
+│  │   │                    ────                      │    │  │
+│  │   │           ┌──┐                    ┌──┐       │    │  │
+│  │   │           └──┘                    └──┘       │    │  │
+│  │   │                                              │    │  │
+│  │   └──────────────────────────────────────────────┘    │  │
+│  │                                                        │  │
+│  │  Arahkan QR code ke dalam bingkai kamera               │  │
+│  └────────────────────────────────────────────────────────┘  │
 │                                                              │
-│  ┌─ Hasil Scan Terakhir ────────────────────────────────┐   │
-│  │                                                      │   │
-│  │  ✅  Ahmad Rizki Pratama                             │   │
-│  │      NISN: 0012345 · Kelas: X RPL                   │   │
-│  │      Tercatat terlambat — 08 Jan 2024, 07:34 WIB    │   │
-│  │                                                      │   │
-│  └──────────────────────────────────────────────────── ┘   │
+│  ┌─ Hasil Scan ──────────────────────────────────────────┐   │
+│  │  ✅  Ahmad Rizki Pratama                              │   │
+│  │      NISN: 0012345 · X RPL                            │   │
+│  │      Tercatat terlambat — 08 Jan 2024, 07:34 WIB      │   │
+│  └───────────────────────────────────────────────────────┘   │
 │                                                              │
-│  ┌─ Hasil Scan Error ───────────────────────────────────┐   │
-│  │  ❌  NISN tidak ditemukan.                           │   │
-│  │      Pastikan kartu siswa terdaftar di sistem.      │   │
-│  └──────────────────────────────────────────────────── ┘   │
+│  atau                                                        │
+│                                                              │
+│  ┌─ ⚠️ ──────────────────────────────────────────────────┐  │
+│  │  Ahmad Rizki Pratama                                   │  │
+│  │  Sudah tercatat terlambat hari ini.                    │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                                                              │
+│  atau                                                        │
+│                                                              │
+│  ┌─ ❌ ──────────────────────────────────────────────────┐  │
+│  │  NISN tidak ditemukan.                                 │  │
+│  │  Pastikan kartu siswa terdaftar di sistem.            │  │
+│  └───────────────────────────────────────────────────────┘  │
 └──────────────────────────────────────────────────────────────┘
 ```
 
 **Spesifikasi:**
-- QR scanner: `html5-qrcode` library (CDN), auto-start
-- Scan guide overlay: kotak sudut biru `border-2 border-blue-500`
-- Hasil sukses: `bg-green-50 border border-green-200`, slide-in dari bawah
-- Hasil error: `bg-red-50 border border-red-200`, shake animation
-- Duplicate check: jika NISN sudah tercatat hari ini, tampilkan peringatan amber bukan error merah
-  - Copy: "Ahmad Rizki sudah tercatat terlambat hari ini."
-- Setelah sukses: hasil tetap tampil, kamera siap scan berikutnya (tidak reload)
+- Layout: `max-w-lg mx-auto` — mobile-first, full-width on small screens, centered on desktop
+- Scanner card: `bg-white rounded-xl shadow-sm border border-slate-200`, padding `p-4 sm:p-5`
+- Header: title "Pindai QR Siswa" (left) + live status badge (right)
+  - Status badge: `bg-slate-100 text-slate-500` (idle) / `bg-green-50 text-green-700` (scanning)
+  - Status dot: `w-1.5 h-1.5 rounded-full`, grey when idle, green when active
+- Scan guide overlay: 4 corner brackets (`w-8 h-8 border-2 border-blue-400`) in a 256-280px square
+  - Animated scan line: `w-0.5 h-8 bg-blue-400/50 rounded-full animate-pulse` centered vertically
+- Hint text: "Arahkan QR code ke dalam bingkai kamera" (centered, `text-xs text-slate-400`)
+- QR scanner: `html5-qrcode` v2.3.8 (CDN), auto-start via `Html5QrcodeScanner`
+- Camera toggle button: styled with `::before` pseudo-element using Font Awesome `\f0c6` (paperclip) icon — no MutationObserver hack needed
+- Camera selector dropdown: `border-slate-300`, rounded, focus ring blue
+- **Hasil sukses (hijau):** `bg-green-50 border border-green-200 rounded-xl p-4`, slide-up animation
+  - Icon: checkmark circle SVG `w-9 h-9`
+  - Nama siswa: `font-semibold text-green-800 text-sm`
+  - NISN + kelas: `text-xs text-green-700`
+  - Timestamp: "Tercatat terlambat — 08 Jan 2024, 07:34 WIB" (`text-xs text-green-600`)
+  - Dismiss button: `text-green-400 hover:text-green-600`
+- **Hasil duplikat (amber):** `bg-amber-50 border border-amber-200 rounded-xl p-4`, fade-in animation
+  - Icon: warning triangle SVG
+  - Message: "Sudah tercatat terlambat hari ini."
+- **Hasil error (merah):** `bg-red-50 border border-red-200 rounded-xl p-4`, shake animation
+  - Icon: X circle SVG
+  - Message: "NISN tidak ditemukan. Pastikan kartu siswa terdaftar di sistem."
 - Scan action: `POST /qrscan/action` → `QrController@scanacti`
+- Setelah scan sukses: hasil tetap tampil, kamera siap scan berikutnya (tidak reload page — flash session)
+- **Responsive:** Scanner viewport fills available width on mobile, capped at `max-w-lg` (32rem) on desktop.
+  - QR box size: 280x280px (shrinks proportionally on small viewports via html5-qrcode)
+- **Live status update:** JavaScript interval (500ms) reads html5-qrcode's native status span and updates the status badge accordingly
+- Scan overlay hidden until video stream is ready (`readyState >= 2`)
 
 ---
 
