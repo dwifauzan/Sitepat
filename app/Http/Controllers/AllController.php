@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AllController extends Controller
@@ -24,31 +25,40 @@ class AllController extends Controller
     function dash()
     {
         $allstat = [
-            "statSiswa" => datasiswa::count(),
-            "statwalKelas" => kelas::select("Walikelas")->count(),
-            "statTelat" => \App\Models\keterlambatan::sum("Telat"),
-            "statkapJurusan" => jurusan::select("Nama_kaproli")->count(),
+            "statSiswa" => DB::table("datasiswa")->count(),
+            "statwalKelas" => DB::table("kelas")->select("Walikelas")->count(),
+            "statTelat" => DB::table("keterlambatans")->sum("Telat"),
+            "statkapJurusan" => DB::table("jurusan")
+                ->select("Nama_kaproli")
+                ->count(),
             "data" => User::with("Role")->get(),
         ];
 
-        // Tampilkan grafik dari semua data keterlambatan
-        $data = \App\Models\keterlambatan::selectRaw(
-            "DATE(Tanggal) as date, SUM(Telat) as telat",
-        )
-            ->groupBy("date")
-            ->orderBy("date", "ASC")
+        // Tampilkan grafik keterlambatan 7 hari terakhir dari data yang ada
+        $data = DB::table("keterlambatans")
+            ->selectRaw("DATE(Tanggal) as date, SUM(Telat) as telat")
+            ->groupBy(DB::raw("DATE(Tanggal)"))
+            ->orderBy("date", "DESC")
+            ->limit(7)
             ->get()
-            ->keyBy("date")
-            ->toArray();
+            ->reverse()
+            ->keyBy("date");
 
-        $dates = [];
-        $telatData = [];
-        // Ambil semua tanggal yang ada di data
-        $allDates = array_keys($data);
-        if (!empty($allDates)) {
-            foreach ($allDates as $date) {
-                $dates[] = Carbon::parse($date)->format("d/m/Y");
-                $telatData[] = $data[$date]["telat"];
+        // Jika tidak ada data, gunakan 7 hari terakhir dengan nilai 0
+        if ($data->isEmpty()) {
+            $dates = [];
+            $telatData = [];
+            for ($i = 6; $i >= 0; $i--) {
+                $dates[] = Carbon::now()->subDays($i)->format("d/m");
+                $telatData[] = 0;
+            }
+        } else {
+            // Gunakan data yang ada
+            $dates = [];
+            $telatData = [];
+            foreach ($data as $date => $item) {
+                $dates[] = Carbon::parse($date)->format("d/m");
+                $telatData[] = $item->telat;
             }
         }
 
