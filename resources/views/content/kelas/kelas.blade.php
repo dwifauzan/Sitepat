@@ -49,93 +49,109 @@
                     <h3 class="text-base font-semibold text-slate-900">Daftar Kelas</h3>
                     <p class="text-sm text-slate-500 mt-0.5">Kelola data kelas dan wali kelas</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <select id="filterTingkat" class="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all">
-                        <option value="">Semua Tingkat</option>
-                        <option value="X">Kelas X</option>
-                        <option value="XI">Kelas XI</option>
-                        <option value="XII">Kelas XII</option>
-                    </select>
+                <div class="flex items-center gap-4">
                     <div class="relative">
-                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <input type="text" id="searchKelas" placeholder="Cari kelas..." class="pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all">
+                        <select id="filterTingkat" class="px-4 py-3.5 border-2 border-slate-200 rounded-xl text-sm font-medium
+                                                       bg-slate-50 transition-all duration-200 ease-in-out
+                                                       focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100
+                                                       hover:border-slate-300 hover:bg-white min-w-[140px]">
+                            <option value="">Semua Tingkat</option>
+                            <option value="X">Kelas X</option>
+                            <option value="XI">Kelas XI</option>
+                            <option value="XII">Kelas XII</option>
+                        </select>
+                    </div>
+                    <div class="relative flex-1 max-w-md">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-slate-400 text-base"></i>
+                        </div>
+                        <input type="text" id="searchKelas" placeholder="Cari kelas atau wali kelas..." 
+                               class="w-full pl-12 pr-6 py-3.5 border-2 border-slate-200 rounded-xl text-sm font-medium
+                                      placeholder:text-slate-400 placeholder:font-normal
+                                      bg-slate-50 transition-all duration-200 ease-in-out
+                                      focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100
+                                      hover:border-slate-300 hover:bg-white">
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Table -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200" id="tableKelas">
-                <thead class="bg-slate-50">
-                    <tr>
-                        <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-16">No</th>
-                        <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-24">
-                            <div class="flex items-center gap-2">
-                                <i class="fas fa-layer-group text-slate-400"></i>
-                                Tingkat
-                            </div>
-                        </th>
-                        <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                            <div class="flex items-center gap-2">
-                                <i class="fas fa-door-open text-slate-400"></i>
-                                Nama Kelas
-                            </div>
-                        </th>
-                        <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                            <div class="flex items-center gap-2">
-                                <i class="fas fa-chalkboard-teacher text-slate-400"></i>
-                                Wali Kelas
-                            </div>
-                        </th>
-                        <th class="px-6 py-3.5 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider w-32">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-slate-200">
-                    @forelse ($dataKelas as $item)
-                        <tr class="hover:bg-blue-50 transition-colors duration-150 group" data-tingkat="{{ $item->Tingkat_kelas }}">
-                            <td class="px-6 py-4 text-sm text-slate-500 font-medium">
-                                <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-blue-100 group-hover:text-blue-700 transition-colors">
-                                    {{ $loop->iteration }}
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold
-                                    {{ $item->Tingkat_kelas == 'X' ? 'bg-green-100 text-green-700' : '' }}
-                                    {{ $item->Tingkat_kelas == 'XI' ? 'bg-blue-100 text-blue-700' : '' }}
-                                    {{ $item->Tingkat_kelas == 'XII' ? 'bg-purple-100 text-purple-700' : '' }}">
-                                    {{ $item->Tingkat_kelas }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4">
+        <div class="overflow-hidden rounded-2xl border-2 border-slate-200 shadow-lg bg-white">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200" id="tableKelas">
+                    <thead class="bg-gradient-to-r from-slate-50 to-slate-100">
+                        <tr>
+                            <th class="px-8 py-5 text-left text-xs font-bold text-slate-700 uppercase tracking-wider w-20 border-b-2 border-slate-200">No</th>
+                            <th class="px-8 py-5 text-left text-xs font-bold text-slate-700 uppercase tracking-wider w-28 border-b-2 border-slate-200">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-lg 
-                                        {{ $item->Tingkat_kelas == 'X' ? 'bg-green-100' : '' }}
-                                        {{ $item->Tingkat_kelas == 'XI' ? 'bg-blue-100' : '' }}
-                                        {{ $item->Tingkat_kelas == 'XII' ? 'bg-purple-100' : '' }}
-                                        flex items-center justify-center flex-shrink-0">
-                                        <i class="fas fa-users 
-                                            {{ $item->Tingkat_kelas == 'X' ? 'text-green-600' : '' }}
-                                            {{ $item->Tingkat_kelas == 'XI' ? 'text-blue-600' : '' }}
-                                            {{ $item->Tingkat_kelas == 'XII' ? 'text-purple-600' : '' }}"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-semibold text-slate-900">{{ $item->Nama_kelas }}</p>
-                                        <p class="text-xs text-slate-500">Kelas {{ $item->Tingkat_kelas }}</p>
-                                    </div>
+                                    <i class="fas fa-layer-group text-green-500 text-sm"></i>
+                                    Tingkat
                                 </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-slate-500 to-slate-600 flex items-center justify-center flex-shrink-0">
-                                        <span class="text-white text-xs font-semibold">{{ strtoupper(substr($item->Walikelas, 0, 1)) }}</span>
-                                    </div>
-                                    <span class="text-sm text-slate-700">{{ $item->Walikelas }}</span>
+                            </th>
+                            <th class="px-8 py-5 text-left text-xs font-bold text-slate-700 uppercase tracking-wider border-b-2 border-slate-200">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-door-open text-blue-500 text-sm"></i>
+                                    Nama Kelas
                                 </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center justify-center gap-2">
-                                    <a href="{{ route('kelasForm', $item->id) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition-all duration-150 text-sm font-medium" title="Edit">
+                            </th>
+                            <th class="px-8 py-5 text-left text-xs font-bold text-slate-700 uppercase tracking-wider border-b-2 border-slate-200">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-chalkboard-teacher text-purple-500 text-sm"></i>
+                                    Wali Kelas
+                                </div>
+                            </th>
+                            <th class="px-8 py-5 text-center text-xs font-bold text-slate-700 uppercase tracking-wider w-36 border-b-2 border-slate-200">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-100">
+                        @forelse ($dataKelas as $item)
+                            <tr class="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 group" data-tingkat="{{ $item->Tingkat_kelas }}">
+                                <td class="px-8 py-6 text-sm text-slate-500 font-medium">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 text-slate-600 group-hover:from-blue-100 group-hover:to-blue-200 group-hover:text-blue-700 transition-all duration-200 font-semibold">
+                                        {{ $loop->iteration }}
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold shadow-sm
+                                        {{ $item->Tingkat_kelas == 'X' ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 border border-green-200' : '' }}
+                                        {{ $item->Tingkat_kelas == 'XI' ? 'bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700 border border-blue-200' : '' }}
+                                        {{ $item->Tingkat_kelas == 'XII' ? 'bg-gradient-to-r from-purple-100 to-violet-100 text-purple-700 border border-purple-200' : '' }}">
+                                        Kelas {{ $item->Tingkat_kelas }}
+                                    </span>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-xl shadow-sm
+                                            {{ $item->Tingkat_kelas == 'X' ? 'bg-gradient-to-br from-green-100 to-emerald-200' : '' }}
+                                            {{ $item->Tingkat_kelas == 'XI' ? 'bg-gradient-to-br from-blue-100 to-cyan-200' : '' }}
+                                            {{ $item->Tingkat_kelas == 'XII' ? 'bg-gradient-to-br from-purple-100 to-violet-200' : '' }}
+                                            flex items-center justify-center flex-shrink-0">
+                                            <i class="fas fa-users text-lg
+                                                {{ $item->Tingkat_kelas == 'X' ? 'text-green-600' : '' }}
+                                                {{ $item->Tingkat_kelas == 'XI' ? 'text-blue-600' : '' }}
+                                                {{ $item->Tingkat_kelas == 'XII' ? 'text-purple-600' : '' }}"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-base font-bold text-slate-900 mb-1">{{ $item->Nama_kelas }}</p>
+                                            <p class="text-sm text-slate-500 font-medium">Kelas {{ $item->Tingkat_kelas }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+                                            <span class="text-white text-sm font-bold">{{ strtoupper(substr($item->Walikelas, 0, 1)) }}</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-semibold text-slate-900">{{ $item->Walikelas }}</p>
+                                            <p class="text-xs text-slate-500">Wali Kelas</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center justify-center gap-3">
+                                        <a href="{{ route('kelasForm', $item->id) }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-blue-600 hover:bg-blue-500 hover:text-white bg-blue-50 transition-all duration-200 text-sm font-semibold shadow-sm hover:shadow-md transform hover:scale-105" title="Edit">
                                         <i class="fas fa-pen text-xs"></i>
                                         <span>Edit</span>
                                     </a>

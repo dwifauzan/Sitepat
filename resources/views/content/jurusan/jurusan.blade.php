@@ -37,66 +37,77 @@
                     <h3 class="text-base font-semibold text-slate-900">Daftar Jurusan</h3>
                     <p class="text-sm text-slate-500 mt-0.5">Kelola data jurusan dan kepala program studi</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <div class="relative">
-                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <input type="text" id="searchJurusan" placeholder="Cari jurusan..." class="pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all">
+                <div class="flex items-center gap-4">
+                    <div class="relative flex-1 max-w-md">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-slate-400 text-base"></i>
+                        </div>
+                        <input type="text" id="searchJurusan" placeholder="Cari jurusan atau kepala program studi..." 
+                               class="w-full pl-12 pr-6 py-3.5 border-2 border-slate-200 rounded-xl text-sm font-medium
+                                      placeholder:text-slate-400 placeholder:font-normal
+                                      bg-slate-50 transition-all duration-200 ease-in-out
+                                      focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100
+                                      hover:border-slate-300 hover:bg-white">
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Table -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200" id="tableJurusan">
-                <thead class="bg-slate-50">
-                    <tr>
-                        <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-16">No</th>
-                        <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                            <div class="flex items-center gap-2">
-                                <i class="fas fa-graduation-cap text-slate-400"></i>
-                                Nama Jurusan
-                            </div>
-                        </th>
-                        <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                            <div class="flex items-center gap-2">
-                                <i class="fas fa-user-tie text-slate-400"></i>
-                                Kepala Program Studi
-                            </div>
-                        </th>
-                        <th class="px-6 py-3.5 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider w-32">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-slate-200">
-                    @forelse ($dataJurusan as $item)
-                        <tr class="hover:bg-blue-50 transition-colors duration-150 group">
-                            <td class="px-6 py-4 text-sm text-slate-500 font-medium">
-                                <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-blue-100 group-hover:text-blue-700 transition-colors">
-                                    {{ $loop->iteration }}
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
+        <div class="overflow-hidden rounded-2xl border-2 border-slate-200 shadow-lg bg-white">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200" id="tableJurusan">
+                    <thead class="bg-gradient-to-r from-slate-50 to-slate-100">
+                        <tr>
+                            <th class="px-8 py-5 text-left text-xs font-bold text-slate-700 uppercase tracking-wider w-20 border-b-2 border-slate-200">No</th>
+                            <th class="px-8 py-5 text-left text-xs font-bold text-slate-700 uppercase tracking-wider border-b-2 border-slate-200">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                        <i class="fas fa-book text-blue-600"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-semibold text-slate-900">{{ $item->Nama_jurusan }}</p>
-                                        <p class="text-xs text-slate-500">Program Studi</p>
-                                    </div>
+                                    <i class="fas fa-graduation-cap text-blue-500 text-sm"></i>
+                                    Nama Jurusan
                                 </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0">
-                                        <span class="text-white text-xs font-semibold">{{ strtoupper(substr($item->Nama_kaproli, 0, 1)) }}</span>
-                                    </div>
-                                    <span class="text-sm text-slate-700">{{ $item->Nama_kaproli }}</span>
+                            </th>
+                            <th class="px-8 py-5 text-left text-xs font-bold text-slate-700 uppercase tracking-wider border-b-2 border-slate-200">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-user-tie text-blue-500 text-sm"></i>
+                                    Kepala Program Studi
                                 </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center justify-center gap-2">
-                                    <a href="{{ route('jurusanForm', $item->id) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition-all duration-150 text-sm font-medium" title="Edit">
+                            </th>
+                            <th class="px-8 py-5 text-center text-xs font-bold text-slate-700 uppercase tracking-wider w-36 border-b-2 border-slate-200">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-100">
+                        @forelse ($dataJurusan as $item)
+                            <tr class="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 group">
+                                <td class="px-8 py-6 text-sm text-slate-500 font-medium">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 text-slate-600 group-hover:from-blue-100 group-hover:to-blue-200 group-hover:text-blue-700 transition-all duration-200 font-semibold">
+                                        {{ $loop->iteration }}
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center flex-shrink-0 shadow-sm">
+                                            <i class="fas fa-book text-blue-600 text-lg"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-base font-bold text-slate-900 mb-1">{{ $item->Nama_jurusan }}</p>
+                                            <p class="text-sm text-slate-500 font-medium">Program Studi</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+                                            <span class="text-white text-sm font-bold">{{ strtoupper(substr($item->Nama_kaproli, 0, 1)) }}</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-semibold text-slate-900">{{ $item->Nama_kaproli }}</p>
+                                            <p class="text-xs text-slate-500">Kepala Program Studi</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center justify-center gap-3">
+                                        <a href="{{ route('jurusanForm', $item->id) }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-blue-600 hover:bg-blue-500 hover:text-white bg-blue-50 transition-all duration-200 text-sm font-semibold shadow-sm hover:shadow-md transform hover:scale-105" title="Edit">
                                         <i class="fas fa-pen text-xs"></i>
                                         <span>Edit</span>
                                     </a>
