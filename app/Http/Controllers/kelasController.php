@@ -38,11 +38,10 @@ class kelasController extends Controller
     }
 
     function update($id){
-        $data = array(
-            'kelas' => kelas::where('id', $id)->first(),
-            'kelasOri' => kelas::distinct()->pluck('Tingkat_kelas')
-        );
-        return view('content.kelas.update', compact('data'));
+        $dataKelas = kelas::where('id', $id)->first();
+        $kelasOri = kelas::distinct()->pluck('Tingkat_kelas');
+        
+        return view('content.kelas.update', compact('dataKelas', 'kelasOri'));
     }
 
     function kelasUpdate($id){
