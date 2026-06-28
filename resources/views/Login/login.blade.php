@@ -28,7 +28,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('loginAction') }}" method="post">
+            <form action="/login/exceute" method="post">
                 @csrf
                 <div class="space-y-4">
                     <div>
